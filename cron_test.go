@@ -44,7 +44,7 @@ func TestJobPanicRecovery(t *testing.T) {
 	}
 }
 
-// Start and stop cron with no entries.
+// TestNoEntries starts and stop cron with no entries.
 func TestNoEntries(t *testing.T) {
 	cron := New()
 	cron.Start()
@@ -56,7 +56,7 @@ func TestNoEntries(t *testing.T) {
 	}
 }
 
-// Start, stop, then add an entry. Verify entry doesn't run.
+// TestStopCausesJobsToNotRun; Start, stop, then add an entry. Verify entry doesn't run.
 func TestStopCausesJobsToNotRun(t *testing.T) {
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
@@ -74,7 +74,7 @@ func TestStopCausesJobsToNotRun(t *testing.T) {
 	}
 }
 
-// Add a job, start cron, expect it runs.
+// TestAddBeforeRunning checks a case when Add a job, start cron, expect it runs.
 func TestAddBeforeRunning(t *testing.T) {
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
@@ -92,7 +92,7 @@ func TestAddBeforeRunning(t *testing.T) {
 	}
 }
 
-// Start cron, add a job, expect it runs.
+// TestAddWhileRunning starts cron, add a job, expect it runs.
 func TestAddWhileRunning(t *testing.T) {
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
@@ -109,7 +109,7 @@ func TestAddWhileRunning(t *testing.T) {
 	}
 }
 
-// Test for #34. Adding a job after calling start results in multiple job invocations
+// TestAddWhileRunningWithDelay tests for #34. Adding a job after calling start results in multiple job invocations
 func TestAddWhileRunningWithDelay(t *testing.T) {
 	cron := New()
 	cron.Start()
@@ -124,7 +124,7 @@ func TestAddWhileRunningWithDelay(t *testing.T) {
 	}
 }
 
-// Test timing with Entries.
+// TestSnapshotEntries checks a case when timing with Entries.
 func TestSnapshotEntries(t *testing.T) {
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
@@ -149,7 +149,7 @@ func TestSnapshotEntries(t *testing.T) {
 
 }
 
-// Test that the entries are correctly sorted.
+// TestMultipleEntries tests that the entries are correctly sorted.
 // Add a bunch of long-in-the-future entries, and an immediate entry, and ensure
 // that the immediate entry runs immediately.
 // Also: Test that multiple jobs run in the same instant.
@@ -173,7 +173,7 @@ func TestMultipleEntries(t *testing.T) {
 	}
 }
 
-// Test running the same job twice.
+// TestRunningJobTwice tests running the same job twice.
 func TestRunningJobTwice(t *testing.T) {
 	wg := &sync.WaitGroup{}
 	wg.Add(2)
@@ -215,7 +215,7 @@ func TestRunningMultipleSchedules(t *testing.T) {
 	}
 }
 
-// Test that the cron is run in the local time zone (as opposed to UTC).
+// TestLocalTimezone tests that the cron is run in the local time zone (as opposed to UTC).
 func TestLocalTimezone(t *testing.T) {
 	wg := &sync.WaitGroup{}
 	wg.Add(2)
@@ -236,7 +236,7 @@ func TestLocalTimezone(t *testing.T) {
 	}
 }
 
-// Test that the cron is run in the given time zone (as opposed to local).
+// TestNonLocalTimezone tests that the cron is run in the given time zone (as opposed to local).
 func TestNonLocalTimezone(t *testing.T) {
 	wg := &sync.WaitGroup{}
 	wg.Add(2)
@@ -263,7 +263,7 @@ func TestNonLocalTimezone(t *testing.T) {
 	}
 }
 
-// Test that calling stop before start silently returns without
+// TestStopWithoutStart checks a case when that calling stop before start silently returns without
 // blocking the stop channel.
 func TestStopWithoutStart(t *testing.T) {
 	cron := New()
@@ -279,7 +279,7 @@ func (t testJob) Run() {
 	t.wg.Done()
 }
 
-// Test that adding an invalid job spec returns an error
+// TestInvalidJobSpec tests that adding an invalid job spec returns an error
 func TestInvalidJobSpec(t *testing.T) {
 	cron := New()
 	err := cron.AddJob("this will not parse", nil)
@@ -288,7 +288,7 @@ func TestInvalidJobSpec(t *testing.T) {
 	}
 }
 
-// Test blocking run method behaves as Start()
+// TestBlockingRun tests blocking run method behaves as Start()
 func TestBlockingRun(t *testing.T) {
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
@@ -313,7 +313,7 @@ func TestBlockingRun(t *testing.T) {
 	}
 }
 
-// Test that double-running is a no-op
+// TestStartNoop checks a case when that double-running is a no-op
 func TestStartNoop(t *testing.T) {
 	var tickChan = make(chan struct{}, 2)
 
@@ -340,7 +340,7 @@ func TestStartNoop(t *testing.T) {
 	}
 }
 
-// Simple test using Runnables.
+// TestJob; Simple test using Runnables.
 func TestJob(t *testing.T) {
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
@@ -383,7 +383,7 @@ func (*ZeroSchedule) Next(time.Time) time.Time {
 	return time.Time{}
 }
 
-// Tests that job without time does not run
+// TestJobWithZeroTimeDoesNotRun tests that job without time does not run
 func TestJobWithZeroTimeDoesNotRun(t *testing.T) {
 	cron := New()
 	calls := 0
